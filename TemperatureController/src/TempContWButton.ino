@@ -106,8 +106,21 @@ void loop() {
 
 }
 
+void turnOff(){
+  analogWrite(heaterPIN, 0);
+
+  digitalWrite(LEDHeater, LOW);
+  digitalWrite(LEDMainTank, LOW);
+  digitalWrite(LEDChem1, LOW);
+  digitalWrite(LEDChem2, LOW);
+  digitalWrite(LEDChem3, LOW);
+
+}
+
 
 void menu() {
+  turnOff();
+
   lcd.clear();
   double potentiometerValue;
   double tempValue;
