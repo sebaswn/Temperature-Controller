@@ -322,69 +322,93 @@ void heater() {
 
 void printLCD() {
 
-  lcd.setCursor(0, 0);
-  lcd.print("T:");
-  lcd.print(int(Target));
+  //lcd.setCursor(0, 0);
 
-  lcd.setCursor(5, 0);
-  lcd.print("M:");
+
+  lcd.setCursor(0, 0);
+  lcd.print("M: ");
   lcd.print(mainTank);
-  lcd.setCursor(13, 0);
+  lcd.setCursor(9, 0);
   if ((Target - mainTank) > 0) {
     lcd.write(0);
   } else if (Target - mainTank < 0) {
     lcd.write(1);
+  }else{
+    lcd.print(" ");
   }
-  lcd.setCursor(14, 0);
-  lcd.print(round(abs(Target - mainTank) * 10) / 10);
+  lcd.setCursor(10, 0);
+  lcd.print((abs(Target - mainTank) * 10) / 10);
   lcd.print(" ");
+  lcd.print("T:");
+  lcd.print(int(Target));
 
   lcd.setCursor(0, 1);
   lcd.print("C1:");
   lcd.print(Chem1);
   lcd.setCursor(9, 1);
-  if ((Target - Chem1) > 0) {
+  if (Chem1 < Target-c1Error) {
     lcd.write(0);
-  } else if (Target - Chem1 < 0) {
+    lcd.setCursor(10, 1);
+    lcd.print((abs((Target-c1Error) - Chem1) * 10) / 10);
+    lcd.print(" ");
+  } else if (Chem1 > Target+c1Error) {
     lcd.write(1);
+    lcd.setCursor(10, 1);
+    lcd.print((abs((Target+c1Error) - Chem1) * 10) / 10);
+    lcd.print(" ");
+  }else {
+    lcd.setCursor(8, 1);
+    lcd.print(" OK   ");
   }
-  lcd.setCursor(10, 1);
-  lcd.print(round(abs(Target - Chem1) * 10) / 10);
-  lcd.print(" ");
+
+
 
   lcd.setCursor(0, 2);
   lcd.print("C2:");
   lcd.print(Chem2);
   lcd.setCursor(9, 2);
-  if ((Target - Chem2) > 0) {
+  if (Chem2 < Target-c2Error) {
     lcd.write(0);
-  } else if (Target - Chem2 < 0) {
+    lcd.setCursor(10, 2);
+    lcd.print((abs((Target-c2Error) - Chem2) * 10) / 10);
+    lcd.print(" ");
+  } else if (Chem2 > Target+c2Error) {
     lcd.write(1);
+    lcd.setCursor(10, 2);
+    lcd.print((abs((Target+c2Error) - Chem2) * 10) / 10);
+    lcd.print(" ");
+  }else {
+    lcd.setCursor(8, 2);
+    lcd.print(" OK   ");
   }
-  lcd.setCursor(10, 2);
-  lcd.print(round(abs(Target - Chem2) * 10) / 10);
-  lcd.print(" ");
+
 
   lcd.setCursor(0, 3);
   lcd.print("C3:");
   lcd.print(Chem3);
   lcd.setCursor(9, 3);
-  if ((Target - Chem3) > 0) {
+  if (Chem3 < c3Temp-c3Error) {
     lcd.write(0);
-  } else if (Target - Chem3 < 0) {
+    lcd.setCursor(10, 3);
+    lcd.print((abs((c3Temp-c3Error) - Chem3) * 10) / 10);
+    lcd.print(" ");
+  } else if (Chem3 > c3Temp+c3Error) {
     lcd.write(1);
+    lcd.setCursor(10, 3);
+    lcd.print((abs((c3Temp+c3Error) - Chem3) * 10) / 10);
+    lcd.print(" ");
+  }else {
+    lcd.setCursor(8, 3);
+    lcd.print(" OK   ");
   }
-  lcd.setCursor(10, 3);
-  lcd.print(round(abs(Target - Chem3) * 10) / 10);
-  lcd.print(" ");
 
-  lcd.setCursor(14, 2);
+  lcd.setCursor(15, 2);
   lcd.print("P:");
   lcd.print(map(heaterPower, 0, 255, 0, 100));
-  if (map(heaterPower, 0, 255, 0, 100) < 100) {
-    lcd.print("% ");
-  } else {
+  if (map(heaterPower, 0, 255, 0, 100) < 100 && map(heaterPower, 0, 255, 0, 100) > 9) {
     lcd.print("%");
+  } else if(map(heaterPower, 0, 255, 0, 100) < 10){
+    lcd.print("% ");
   }
 
 }
