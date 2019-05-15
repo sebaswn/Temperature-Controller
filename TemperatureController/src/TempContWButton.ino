@@ -79,6 +79,13 @@ void setup() {
   pinMode(heaterPIN, OUTPUT);
 
   pinMode(Button, INPUT_PULLUP);
+
+
+
+  lcd.setCursor(0, 0);
+  lcd.print("Welcome");
+
+  delay(1000);
 }
 
 void loop() {
@@ -233,7 +240,7 @@ void menu() {
   lcd.setCursor(0, 0);
   lcd.print("Set ");
   lcd.write(3);
-  lcd.print(" Error C2: ");
+  lcd.print(" Error C3: ");
 
   while (digitalRead(Button) == NOTPRESSEDBUTTON) {
     if (analogRead(Potentiometer) < tempValue + 10 && analogRead(Potentiometer) > tempValue - 10 && menuValueChanged == false && firstTimeMenu == false) {
@@ -386,9 +393,9 @@ void printLCD() {
 void updateSensors() {
   sensors.requestTemperatures();
   mainTank = sensors.getTempC(mainTankSensor);
-  Chem3 = sensors.getTempC(Chem1Sensor);
+  Chem3 = sensors.getTempC(Chem3Sensor);
   Chem2 = sensors.getTempC(Chem2Sensor);
-  Chem1 = sensors.getTempC(Chem3Sensor);
+  Chem1 = sensors.getTempC(Chem1Sensor);
 
   if (mainTank < 0) {
     updateSensors();
@@ -406,25 +413,25 @@ void updateLEDs() {
     digitalWrite(LEDHeater, LOW);
   }
 
-  if (mainTank >= Target) {
+  if(mainTank >= Target){
     digitalWrite(LEDMainTank, HIGH);
-  } else {
+  }else{
     digitalWrite(LEDMainTank, LOW);
   }
 
-  if (Chem1 >= Target) {
+  if(Chem1 >= Target - c1Error && Chem1 <= Target + c1Error ){
     digitalWrite(LEDChem1, HIGH);
   } else {
     digitalWrite(LEDChem1, LOW);
   }
 
-  if (Chem2 >= Target) {
+  if(Chem2 >= Target - c2Error && Chem2 <= Target + c2Error ){
     digitalWrite(LEDChem2, HIGH);
   } else {
     digitalWrite(LEDChem2, LOW);
   }
 
-  if (Chem3 >= Target) {
+  if(Chem3 >= c3Temp - c3Error && Chem3 <= c3Temp + c3Error ){
     digitalWrite(LEDChem3, HIGH);
   } else {
     digitalWrite(LEDChem3, LOW);
