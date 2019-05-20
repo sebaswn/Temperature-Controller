@@ -36,10 +36,12 @@ double Target = 0;
 double Kp = 1, Ki = 10, Kd = 1;
 double PIDinput = 0;
 double heaterPower = 0;
+int maxHeaterPower = 0;
 boolean heaterStatus = OFF;
 
 double c1Error, c2Error;
 double c3Temp, c3Error;
+
 
 byte upArrow[] =       {B00100, B01110, B10101, B00100, B00100, B00100, B00100, B00100};
 byte downArrow[] =     {B00100, B00100, B00100, B00100, B00100, B10101, B01110, B00100};
@@ -279,6 +281,29 @@ void menu() {
     lcd.print("C ");
   }
   c3Error = potentiometerValue;
+  menuValueChanged = false;
+  lcd.clear();
+  delay(500);
+
+
+  tempValue = analogRead(Potentiometer);
+  lcd.setCursor(0, 0);
+  lcd.print("Set heater power (0-100)");
+
+  while (digitalRead(Button) == NOTPRESSEDBUTTON) {
+    if (analogRead(Potentiometer) < tempValue + 10 && analogRead(Potentiometer) > tempValue - 10 && menuValueChanged == false && firstTimeMenu == false) {
+      potentiometerValue = maxHeaterPower;
+    } else {
+      int tempPotentiometerValue = analogRead(Potentiometer);
+      potentiometerValue = map(tempPotentiometerValue, 0, 1023, 0, 100);
+    }
+
+
+    lcd.setCursor(0, 1);
+    lcd.print(potentiometerValue);
+
+  }
+  maxHeaterPower = potentiometerValue;
   menuValueChanged = false;
   lcd.clear();
   delay(500);
