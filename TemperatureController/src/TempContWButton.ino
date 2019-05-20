@@ -328,8 +328,10 @@ void heater() {
   } else {
     heaterStatus = ON;
   }
-  Serial.println(heaterPower);
-  analogWrite(heaterPIN, heaterPower);
+  int test = map(heaterPower, 0, 255, 0, 127);
+  //heaterPower = map(heaterPower, 0, 255/2,0,255);
+  Serial.println(test);
+  analogWrite(heaterPIN, test);
 }
 
 
@@ -357,66 +359,83 @@ void printLCD() {
 
   lcd.setCursor(0, 1);
   lcd.print("C1:");
-  lcd.print(Chem1);
-  lcd.setCursor(9, 1);
-  if (Chem1 < Target-c1Error) {
-    lcd.write(0);
-    lcd.setCursor(10, 1);
-    lcd.print((abs((Target-c1Error) - Chem1) * 10) / 10);
-    lcd.print(" ");
-  } else if (Chem1 > Target+c1Error) {
-    lcd.write(1);
-    lcd.setCursor(10, 1);
-    lcd.print((abs((Target+c1Error) - Chem1) * 10) / 10);
-    lcd.print(" ");
-  }else {
-    lcd.setCursor(8, 1);
-    lcd.print(" OK   ");
+  if(Chem1 > 0){
+    lcd.print(Chem1);
+    lcd.setCursor(9, 1);
+    if (Chem1 < Target-c1Error) {
+      lcd.write(0);
+      lcd.setCursor(10, 1);
+      lcd.print((abs((Target-c1Error) - Chem1) * 10) / 10);
+      lcd.print(" ");
+    } else if (Chem1 > Target+c1Error) {
+      lcd.write(1);
+      lcd.setCursor(10, 1);
+      lcd.print((abs((Target+c1Error) - Chem1) * 10) / 10);
+      lcd.print(" ");
+    }else {
+      lcd.setCursor(8, 1);
+      lcd.print(" OK   ");
+    }
+  }else{
+      lcd.print("Err         ");
   }
+
+
 
 
 
   lcd.setCursor(0, 2);
   lcd.print("C2:");
-  lcd.print(Chem2);
-  lcd.setCursor(9, 2);
-  if (Chem2 < Target-c2Error) {
-    lcd.write(0);
-    lcd.setCursor(10, 2);
-    lcd.print((abs((Target-c2Error) - Chem2) * 10) / 10);
-    lcd.print(" ");
-  } else if (Chem2 > Target+c2Error) {
-    lcd.write(1);
-    lcd.setCursor(10, 2);
-    lcd.print((abs((Target+c2Error) - Chem2) * 10) / 10);
-    lcd.print(" ");
-  }else {
-    lcd.setCursor(8, 2);
-    lcd.print(" OK   ");
+  if(Chem2 > 0){
+    lcd.print(Chem2);
+    lcd.setCursor(9, 2);
+    if (Chem2 < Target-c2Error) {
+      lcd.write(0);
+      lcd.setCursor(10, 2);
+      lcd.print((abs((Target-c2Error) - Chem2) * 10) / 10);
+      lcd.print(" ");
+    } else if (Chem2 > Target+c2Error) {
+      lcd.write(1);
+      lcd.setCursor(10, 2);
+      lcd.print((abs((Target+c2Error) - Chem2) * 10) / 10);
+      lcd.print(" ");
+    }else {
+      lcd.setCursor(8, 2);
+      lcd.print(" OK   ");
+    }
+  }else{
+      lcd.print("Err         ");
   }
+
 
 
   lcd.setCursor(0, 3);
   lcd.print("C3:");
-  lcd.print(Chem3);
-  lcd.setCursor(9, 3);
-  if (Chem3 < c3Temp-c3Error) {
-    lcd.write(0);
-    lcd.setCursor(10, 3);
-    lcd.print((abs((c3Temp-c3Error) - Chem3) * 10) / 10);
-    lcd.print(" ");
-  } else if (Chem3 > c3Temp+c3Error) {
-    lcd.write(1);
-    lcd.setCursor(10, 3);
-    lcd.print((abs((c3Temp+c3Error) - Chem3) * 10) / 10);
-    lcd.print(" ");
-  }else {
-    lcd.setCursor(8, 3);
-    lcd.print(" OK   ");
+  if(Chem3 > 0){
+    lcd.print(Chem3);
+
+    lcd.setCursor(9, 3);
+    if (Chem3 < c3Temp-c3Error) {
+      lcd.write(0);
+      lcd.setCursor(10, 3);
+      lcd.print((abs((c3Temp-c3Error) - Chem3) * 10) / 10);
+      lcd.print(" ");
+    } else if (Chem3 > c3Temp+c3Error) {
+      lcd.write(1);
+      lcd.setCursor(10, 3);
+      lcd.print((abs((c3Temp+c3Error) - Chem3) * 10) / 10);
+      lcd.print(" ");
+    }else {
+      lcd.setCursor(8, 3);
+      lcd.print(" OK   ");
+    }
+  }else{
+    lcd.print("Err         ");
   }
 
+
   lcd.setCursor(15, 2);
-  lcd.print("P:");
+  lcd.print(" P");
   lcd.print(map(heaterPower, 0, 255, 0, 100));
   if (map(heaterPower, 0, 255, 0, 100) < 100 && map(heaterPower, 0, 255, 0, 100) > 9) {
     lcd.print("%");
@@ -438,6 +457,7 @@ void updateSensors() {
     updateSensors();
     return;
   }
+
 
   //int potentiometerTargetue = analogRead(Potentiometer);
   //Target = map(potentiometerTargetue, 0, 1023, 0, maxTemp);
