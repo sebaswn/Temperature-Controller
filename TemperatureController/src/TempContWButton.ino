@@ -328,10 +328,10 @@ void heater() {
   } else {
     heaterStatus = ON;
   }
-  int test = map(heaterPower, 0, 255, 0, 127);
+  int heaterPowerScaled = map(heaterPower, 0, 255, 0, 127);
   //heaterPower = map(heaterPower, 0, 255/2,0,255);
-  Serial.println(test);
-  analogWrite(heaterPIN, test);
+  Serial.println(heaterPowerScaled);
+  analogWrite(heaterPIN, heaterPowerScaled);
 }
 
 
